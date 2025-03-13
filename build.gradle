@@ -1,11 +1,9 @@
 plugins {
- id "com.moowork.node" version "1.2.0"
+ id "com.github.node-gradle.node" version "7.1.0"
 }
 
 node {
- version = "6.9.1"
- distBaseUrl = "https://direct.nodejs.org/dist/"
- download = "true"
+ download = true
  }
 
 task build
@@ -20,14 +18,12 @@ task zip(type: Zip) {
     include "routes/**"
     include "views/**"
   }
-  destinationDir(file("dist"))
-  baseName "trainSchedule"
+  getDestinationDirectory().set(file("dist"))
+  archiveBaseName="trainSchedule"
 }
 
 build.dependsOn zip
 zip.dependsOn npm_build
-build.dependsOn npm_build
-npm_build.dependsOn npmInstall
+npm_build.dependsOn npmSetup
+npm_Setup.dependsOn npmInstall
 npm_build.dependsOn npm_test
-npm_test.dependsOn npmInstall
-
